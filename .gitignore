@@ -163,3 +163,7 @@ cython_debug/
 # Project specific files
 volume/
 cdk.out/
+*/.terraform*
+terraform/terraform.tfstate*
+terraform/*.zip
+.vscode/

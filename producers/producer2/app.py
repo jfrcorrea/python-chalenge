@@ -5,17 +5,15 @@ This producer randomly adds an error in the data to assess the "Event Processor"
 """
 
 import json
-import os
 import random
 import time
 import typing
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import boto3
 
-AWS_DEFAULT_REGION = os.environ["AWS_DEFAULT_REGION"]
-AWS_ENDPOINT_URL = os.environ["AWS_ENDPOINT_URL"]
+AWS_DEFAULT_REGION = "us-east-1"
 
 
 def add_field(data: dict[str, typing.Any]) -> dict[str, typing.Any]:
@@ -56,21 +54,25 @@ def main() -> None:
             "id": str(uuid4()),
             "value": random.random() * 100,
             "created_at": int(datetime.now(UTC).timestamp() * 1000),
+            "producer": "producer2",
         }
         # Randomly force an error
-        if random.randint(0, 1000) == 0:
+        if random.randint(0, 10) == 0:
             # Coin flip
             if random.randint(0, 1):
                 # When false, add an unexpected field
                 data = add_field(data)
+                print("add an unexpected field")
             else:
                 # When true, change a field type
                 data = change_field(data)
+                print("change a field type")
         kinesis_client.put_record(
-            StreamName="input-data-stream",
+            StreamName="SourceStream",
             Data=json.dumps(data),
             PartitionKey=data["id"],
         )
+        print("record sent")
         time.sleep(0.1)
 
 
