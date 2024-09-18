@@ -42,3 +42,27 @@ resource "aws_lambda_function" "validate" {
 
   timeout = 60
 }
+
+resource "aws_iam_policy" "firehose_lambda" {
+  policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Sid": "",
+        "Effect": "Allow",
+        "Action": [
+          "lambda:InvokeFunction",
+          "lambda:GetFunctionConfiguration"
+        ],
+        "Resource": "${aws_lambda_function.validate.arn}:*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "firehose_lambda_policy" {
+  role       = aws_iam_role.firehose_role.name
+  policy_arn = aws_iam_policy.firehose_lambda.arn
+}
