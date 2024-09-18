@@ -11,16 +11,16 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "validate-role" {
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-  path = "/service-role/"
-  tags = {}
-}
-
 data "archive_file" "lambda" {
   type        = "zip"
-  source_dir = "functions/validate"
+  source_dir  = "functions/validate"
   output_path = "validate.zip"
+}
+
+resource "aws_iam_role" "validate-role" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  path               = "/service-role/"
+  tags               = {}
 }
 
 resource "aws_lambda_function" "validate" {
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "validate" {
   # path.module in the filename.
   filename      = "validate.zip"
   function_name = "validate"
-  description = "An Amazon Data Firehose stream processor that accesses the records in the input and returns them with a processing status.  Use this processor for any custom transformation logic."
+  description   = "An Amazon Data Firehose stream processor that accesses the records in the input and returns them with a processing status.  Use this processor for any custom transformation logic."
   role          = aws_iam_role.validate-role.arn
   handler       = "main.handler"
 

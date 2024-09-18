@@ -19,6 +19,6 @@ data "aws_iam_policy_document" "target_topic_iam_policy" {
 }
 
 resource "aws_sns_topic" "target_topic" {
-  name = "target_topic"
+  name   = "target_topic"
   policy = data.aws_iam_policy_document.target_topic_iam_policy.json
 }
