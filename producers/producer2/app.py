@@ -8,7 +8,7 @@ import json
 import random
 import time
 import typing
-from datetime import UTC, datetime
+from datetime import datetime
 from uuid import uuid4
 
 import boto3
@@ -53,7 +53,7 @@ def main() -> None:
         data = {
             "id": str(uuid4()),
             "value": random.random() * 100,
-            "created_at": int(datetime.now(UTC).timestamp() * 1000),
+            "created_at": int(datetime.utcnow().timestamp() * 1000),
             "producer": "producer2",
         }
         # Randomly force an error

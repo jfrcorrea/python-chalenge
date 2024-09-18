@@ -20,5 +20,3 @@ The invalid data records are stored in the same S3 Bucket, but in a different fo
 ## Instructions
 
 ### Using the application
-
-### Run integration tests

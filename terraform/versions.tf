@@ -1,10 +1,7 @@
 terraform {
   required_version = ">1"
-  backend "s3" {
-    bucket  = "jfrcorrea-event-processor"
-    region  = "us-east-1"
-    key     = "s3/terraform.tfstate"
-    profile = "default"
+  backend "local" {
+    path = "terraform.tfstate"
   }
 
   required_providers {
